@@ -10,11 +10,6 @@ declare(strict_types=1);
 
 namespace Mezzio\Router;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-
 /**
  * Value object representing the results of routing.
  *
@@ -35,7 +30,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  * RouteResult instances are consumed by the Application in the routing
  * middleware.
  */
-class RouteResult implements MiddlewareInterface
+class RouteResult
 {
     /** @var null|string[] */
     private $allowedMethods = [];
@@ -87,23 +82,6 @@ class RouteResult implements MiddlewareInterface
     }
 
     /**
-     * Process the result as middleware.
-     *
-     * If the result represents a failure, it passes handling to the handler.
-     *
-     * Otherwise, it processes the composed middleware using the provide request
-     * and handler.
-     */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-        if ($this->isFailure()) {
-            return $handler->handle($request);
-        }
-
-        return $this->getMatchedRoute()->process($request, $handler);
-    }
-
-    /**
      * Does the result represent successful routing?
      */
     public function isSuccess(): bool
@@ -136,7 +114,7 @@ class RouteResult implements MiddlewareInterface
             return false;
         }
 
-        if (! $this->matchedRouteName && $this->route) {
+        if (!$this->matchedRouteName && $this->route) {
             $this->matchedRouteName = $this->route->getName();
         }
 
@@ -158,7 +136,7 @@ class RouteResult implements MiddlewareInterface
      */
     public function isFailure(): bool
     {
-        return ! $this->success;
+        return !$this->success;
     }
 
     /**

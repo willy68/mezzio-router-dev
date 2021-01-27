@@ -30,7 +30,7 @@ class ImplicitOptionsMiddlewareFactory
      */
     public function __invoke(ContainerInterface $container): ImplicitOptionsMiddleware
     {
-        if (! $container->has(ResponseInterface::class)) {
+        if (!$container->has(ResponseInterface::class)) {
             throw MissingDependencyException::dependencyForService(
                 ResponseInterface::class,
                 ImplicitOptionsMiddleware::class

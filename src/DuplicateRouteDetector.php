@@ -76,7 +76,7 @@ final class DuplicateRouteDetector
             $this->duplicateRouteDetected($route);
         }
 
-        if (! isset($this->routePaths[$route->getPath()])) {
+        if (!isset($this->routePaths[$route->getPath()])) {
             return;
         }
 

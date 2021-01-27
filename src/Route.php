@@ -10,11 +10,6 @@ declare(strict_types=1);
 
 namespace Mezzio\Router;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
-
 use function array_map;
 use function array_reduce;
 use function implode;
@@ -39,7 +34,7 @@ use function strtoupper;
  * be provided after instantiation via the "options" property and related
  * setOptions() method.
  */
-class Route implements MiddlewareInterface
+class Route
 {
     public const HTTP_METHOD_ANY       = null;
     public const HTTP_METHOD_SEPARATOR = ':';
@@ -47,8 +42,8 @@ class Route implements MiddlewareInterface
     /** @var null|string[] HTTP methods allowed with this route. */
     private $methods;
 
-    /** @var MiddlewareInterface Middleware associated with route. */
-    private $middleware;
+    /** @var string|callable associated with route. */
+    private $callback;
 
     /** @var array Options related to this route to pass to the routing implementation. */
     private $options = [];
@@ -60,35 +55,34 @@ class Route implements MiddlewareInterface
     private $name;
 
     /**
+     * parent group
+     *
+     * @var RouteGroup
+     */
+    private $group;
+
+    /**
      * @param string              $path Path to match.
-     * @param MiddlewareInterface $middleware Middleware to use when this route is matched.
+     * @param string|callable            $callback to use when this route is matched.
      * @param null|string[]       $methods Allowed HTTP methods; defaults to HTTP_METHOD_ANY.
      * @param null|string         $name the route name
      */
     public function __construct(
         string $path,
-        MiddlewareInterface $middleware,
-        ?array $methods = self::HTTP_METHOD_ANY,
-        ?string $name = null
+        $callback,
+        ?string $name = null,
+        ?array $methods = self::HTTP_METHOD_ANY
     ) {
         $this->path       = $path;
-        $this->middleware = $middleware;
+        $this->callback   = $callback;
         $this->methods    = is_array($methods) ? $this->validateHttpMethods($methods) : $methods;
 
-        if (! $name) {
+        if (!$name) {
             $name = $this->methods === self::HTTP_METHOD_ANY
                 ? $path
                 : $path . '^' . implode(self::HTTP_METHOD_SEPARATOR, $this->methods);
         }
         $this->name = $name;
-    }
-
-    /**
-     * Proxies to the middleware composed during instantiation.
-     */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
-        return $this->middleware->process($request, $handler);
     }
 
     public function getPath(): string
@@ -109,9 +103,9 @@ class Route implements MiddlewareInterface
         return $this->name;
     }
 
-    public function getMiddleware(): MiddlewareInterface
+    public function getCallback()
     {
-        return $this->middleware;
+        return $this->callback;
     }
 
     /**
@@ -152,6 +146,36 @@ class Route implements MiddlewareInterface
     }
 
     /**
+     * Get the parent group
+     *
+     * @return RouteGroup
+     */
+    public function getParentGroup(): ?RouteGroup
+    {
+        return $this->group;
+    }
+
+    /**
+     * Set the parent group
+     *
+     * @param RouteGroup $group
+     *
+     * @return Route
+     */
+    public function setParentGroup(RouteGroup $group): self
+    {
+        $this->group = $group;
+        $prefix      = $this->group->getPrefix();
+        $path        = $this->getPath();
+
+        if (strcmp($prefix, substr($path, 0, strlen($prefix))) !== 0) {
+            $path = $prefix . $path;
+            $this->path = $path;
+        }
+
+        return $this;
+    }
+    /**
      * Validate the provided HTTP method names.
      *
      * Validates, and then normalizes to upper case.
@@ -174,11 +198,11 @@ class Route implements MiddlewareInterface
                     return false;
                 }
 
-                if (! is_string($method)) {
+                if (!is_string($method)) {
                     return false;
                 }
 
-                if (! preg_match('/^[!#$%&\'*+.^_`\|~0-9a-z-]+$/i', $method)) {
+                if (!preg_match('/^[!#$%&\'*+.^_`\|~0-9a-z-]+$/i', $method)) {
                     return false;
                 }
 

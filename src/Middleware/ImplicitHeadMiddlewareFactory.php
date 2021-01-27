@@ -35,8 +35,8 @@ class ImplicitHeadMiddlewareFactory
     public function __invoke(ContainerInterface $container): ImplicitHeadMiddleware
     {
         if (
-            ! $container->has(RouterInterface::class)
-            && ! $container->has(ZendExpressiveRouterInterface::class)
+            !$container->has(RouterInterface::class)
+            && !$container->has(ZendExpressiveRouterInterface::class)
         ) {
             throw MissingDependencyException::dependencyForService(
                 RouterInterface::class,
@@ -44,7 +44,7 @@ class ImplicitHeadMiddlewareFactory
             );
         }
 
-        if (! $container->has(StreamInterface::class)) {
+        if (!$container->has(StreamInterface::class)) {
             throw MissingDependencyException::dependencyForService(
                 StreamInterface::class,
                 ImplicitHeadMiddleware::class

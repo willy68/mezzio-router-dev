@@ -27,7 +27,7 @@ interface RouterInterface
      * modify route instances before matching (e.g., to provide route options,
      * inject a name, etc.).
      */
-    public function addRoute(Route $route): void;
+    public function addRoute(Route $route): Route;
 
     /**
      * Match a request against the known routes.

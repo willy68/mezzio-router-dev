@@ -83,7 +83,7 @@ class ImplicitHeadMiddleware implements MiddlewareInterface
         }
 
         $result = $request->getAttribute(RouteResult::class);
-        if (! $result) {
+        if (!$result) {
             return $handler->handle($request);
         }
 

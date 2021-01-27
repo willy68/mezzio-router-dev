@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace Mezzio\Router;
 
-use Psr\Http\Server\MiddlewareInterface;
-
 /**
  * Aggregate routes for the router.
  *
@@ -59,7 +57,7 @@ class RouteCollector
     /**
      * Add a route for the route middleware to match.
      *
-     * Accepts a combination of a path and middleware, and optionally the HTTP methods allowed.
+     * Accepts a combination of a path and callback, and optionally the HTTP methods allowed.
      *
      * @param null|array  $methods HTTP method to accept; null indicates any.
      * @param null|string $name The name of the route.
@@ -67,12 +65,12 @@ class RouteCollector
      */
     public function route(
         string $path,
-        MiddlewareInterface $middleware,
-        ?array $methods = null,
-        ?string $name = null
+        $callback,
+        ?string $name = null,
+        ?array $methods = null
     ): Route {
         $methods = $methods ?? Route::HTTP_METHOD_ANY;
-        $route   = new Route($path, $middleware, $methods, $name);
+        $route   = new Route($path, $callback, $name, $methods);
         $this->detectDuplicate($route);
         $this->routes[] = $route;
         $this->router->addRoute($route);
@@ -83,49 +81,49 @@ class RouteCollector
     /**
      * @param null|string $name The name of the route.
      */
-    public function get(string $path, MiddlewareInterface $middleware, ?string $name = null): Route
+    public function get(string $path, $callback, ?string $name = null): Route
     {
-        return $this->route($path, $middleware, ['GET'], $name);
+        return $this->route($path, $callback, $name, ['GET']);
     }
 
     /**
      * @param null|string $name The name of the route.
      */
-    public function post(string $path, MiddlewareInterface $middleware, ?string $name = null): Route
+    public function post(string $path, $callback, ?string $name = null): Route
     {
-        return $this->route($path, $middleware, ['POST'], $name);
+        return $this->route($path, $callback, $name, ['POST']);
     }
 
     /**
      * @param null|string $name The name of the route.
      */
-    public function put(string $path, MiddlewareInterface $middleware, ?string $name = null): Route
+    public function put(string $path, $callback, ?string $name = null): Route
     {
-        return $this->route($path, $middleware, ['PUT'], $name);
+        return $this->route($path, $callback, $name, ['PUT']);
     }
 
     /**
      * @param null|string $name The name of the route.
      */
-    public function patch(string $path, MiddlewareInterface $middleware, ?string $name = null): Route
+    public function patch(string $path, $callback, ?string $name = null): Route
     {
-        return $this->route($path, $middleware, ['PATCH'], $name);
+        return $this->route($path, $callback, $name, ['PATCH']);
     }
 
     /**
      * @param null|string $name The name of the route.
      */
-    public function delete(string $path, MiddlewareInterface $middleware, ?string $name = null): Route
+    public function delete(string $path, $callback, ?string $name = null): Route
     {
-        return $this->route($path, $middleware, ['DELETE'], $name);
+        return $this->route($path, $callback, $name, ['DELETE']);
     }
 
     /**
      * @param null|string $name The name of the route.
      */
-    public function any(string $path, MiddlewareInterface $middleware, ?string $name = null): Route
+    public function any(string $path, $callback, ?string $name = null): Route
     {
-        return $this->route($path, $middleware, null, $name);
+        return $this->route($path, $callback, null, $name);
     }
 
     /**
@@ -140,7 +138,7 @@ class RouteCollector
 
     private function detectDuplicate(Route $route): void
     {
-        if ($this->detectDuplicates && ! $this->duplicateRouteDetector) {
+        if ($this->detectDuplicates && !$this->duplicateRouteDetector) {
             $this->duplicateRouteDetector = new DuplicateRouteDetector();
         }
 

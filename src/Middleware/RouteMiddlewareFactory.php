@@ -52,7 +52,7 @@ class RouteMiddlewareFactory
      */
     public function __invoke(ContainerInterface $container): RouteMiddleware
     {
-        if (! $container->has($this->routerServiceName)) {
+        if (!$container->has($this->routerServiceName)) {
             throw MissingDependencyException::dependencyForService(
                 $this->routerServiceName,
                 RouteMiddleware::class

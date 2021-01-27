@@ -30,7 +30,7 @@ class MethodNotAllowedMiddlewareFactory
      */
     public function __invoke(ContainerInterface $container): MethodNotAllowedMiddleware
     {
-        if (! $container->has(ResponseInterface::class)) {
+        if (!$container->has(ResponseInterface::class)) {
             throw MissingDependencyException::dependencyForService(
                 ResponseInterface::class,
                 MethodNotAllowedMiddleware::class
