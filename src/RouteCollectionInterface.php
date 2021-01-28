@@ -12,17 +12,6 @@ interface RouteCollectionInterface
 {
 
     /**
-     * Add a route to the collection
-     *
-     * @param string $uri
-     * @param string|callable $callable
-     * @param string|null $name
-     * @param array|null $method
-     * @return Route
-     */
-    public function addRoute(string $uri, $callable, ?string $name = null, ?array $method = null): Route;
-
-    /**
      * Add a route that responds to GET HTTP method
      *
      * @param string $uri

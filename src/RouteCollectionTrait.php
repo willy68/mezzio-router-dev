@@ -11,7 +11,6 @@ namespace Mezzio\Router;
 trait RouteCollectionTrait
 {
 
-
     /**
      * Add a route to the collection
      *

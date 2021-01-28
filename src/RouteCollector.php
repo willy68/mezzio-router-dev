@@ -21,6 +21,8 @@ namespace Mezzio\Router;
  * - put
  * - patch
  * - delete
+ * - head
+ * - options
  * - any
  *
  * A general `route()` method allows specifying multiple request methods and/or
@@ -30,7 +32,7 @@ namespace Mezzio\Router;
  * attaching via one of the exposed methods, and will raise an exception when a
  * collision occurs.
  */
-class RouteCollector
+class RouteCollector implements RouteCollectionInterface
 {
     /** @var RouterInterface */
     protected $router;
@@ -123,7 +125,34 @@ class RouteCollector
      */
     public function any(string $path, $callback, ?string $name = null): Route
     {
-        return $this->route($path, $callback, null, $name);
+        return $this->route($path, $callback, $name, null);
+    }
+
+    /**
+     * Add a route that responds to HEAD HTTP method
+     *
+     * @param string $uri
+     * @param callable|string $callable
+     * @param string|null $name
+     * @return Route
+     */
+    public function head(string $uri, $callable, ?string $name = null): Route
+    {
+        return $this->route($uri, $callable, $name, ['HEAD']);
+    }
+
+    /**
+     * Add a route that responds to OPTIONS HTTP method
+     *
+     * @param string $uri
+     * @param string|callable $callable
+     * @param string|null $name
+     *
+     * @return Route
+     */
+    public function options(string $uri, $callable, ?string $name = null): Route
+    {
+        return $this->route($uri, $callable, $name, ['OPTIONS']);
     }
 
     /**

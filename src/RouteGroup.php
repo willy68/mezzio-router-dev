@@ -4,7 +4,6 @@ namespace Mezzio\Router;
 
 use Mezzio\Router\Middleware\Stack\MiddlewareAwareStackTrait;
 
-
 /**
  * Ex:
  * ```
@@ -95,9 +94,9 @@ class RouteGroup
     }
 
     /**
-     * Undocumented function
+     * Perfom all crud routes for a given class controller
      *
-     * @param string|callable $callable
+     * @param string|callable $callable the class name generally
      * @param string $prefixName
      * @return self
      */
