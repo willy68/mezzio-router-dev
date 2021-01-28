@@ -25,6 +25,10 @@
     "extra": {
         "laminas": {
             "config-provider": "Mezzio\\Router\\ConfigProvider"
+        },
+
+        "branch-alias": {
+            "dev-master": "3.5.x-dev"
         }
     },
     "require": {
