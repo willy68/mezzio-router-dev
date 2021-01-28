@@ -20,18 +20,6 @@ trait RouteCollectionTrait
      * @param array|null $method
      * @return Route
      */
-    abstract public function addRoute(Route $route): Route;
-
-
-    /**
-     * Add a route to the collection
-     *
-     * @param string $uri
-     * @param string|callable $callable
-     * @param string|null $name
-     * @param array|null $method
-     * @return Route
-     */
     public function route(string $uri, $callable, ?string $name = null, ?array $method = null): Route
     {
         return $this->addRoute(new Route($uri, $callable, $name, $method));
