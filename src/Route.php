@@ -90,12 +90,19 @@ class Route
         return $this->path;
     }
 
+    public function setPath(string $path): self
+    {
+        $this->path = $path;
+        return $this;
+    }
+
     /**
      * Set the route name.
      */
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+        return $this;
     }
 
     public function getName(): string
@@ -135,9 +142,10 @@ class Route
         return $this->methods === self::HTTP_METHOD_ANY;
     }
 
-    public function setOptions(array $options): void
+    public function setOptions(array $options): self
     {
         $this->options = $options;
+        return $this;
     }
 
     public function getOptions(): array

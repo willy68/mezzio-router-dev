@@ -9,9 +9,9 @@ use Mezzio\Router\Middleware\Stack\MiddlewareAwareStackTrait;
  * Ex:
  * ```
  * $router->group('/admin', function (RouteGroup $route) {
- * $route->addRoute('/acme/route1', 'AcmeController::actionOne', 'route1', [GET]);
- * $route->addRoute('/acme/route2', 'AcmeController::actionTwo', 'route2', [GET])->setScheme('https');
- * $route->addRoute('/acme/route3', 'AcmeController::actionThree', 'route3', [GET]);
+ * $route->route('/acme/route1', 'AcmeController::actionOne', 'route1', [GET]);
+ * $route->route('/acme/route2', 'AcmeController::actionTwo', 'route2', [GET])->setScheme('https');
+ * $route->route('/acme/route3', 'AcmeController::actionThree', 'route3', [GET]);
  * })
  * ->middleware(Middleware::class);
  * ```
@@ -76,13 +76,19 @@ class RouteGroup
      * @param array|null $method
      * @return Route
      */
-    public function addRoute(string $uri, $callable, ?string $name = null, ?array $method = null): Route
+    public function addRoute(Route $route): Route
     {
+        $uri = $route->getPath();
         $path  = ($uri === '/') ? $this->prefix : $this->prefix . sprintf('/%s', ltrim($uri, '/'));
+        $route->setPath($path);
+
+        $name = $route->getName();
+        $method = $route->getAllowedMethods();
         if ($name === null) {
-            $name = ($method === null) ? $this->prefix . $uri : $this->prefix . $uri . '^' . join(':', $method);
+            $name = ($method === null) ? $this->prefix . $path : $this->prefix . $path . '^' . join(':', $method);
         }
-        $route = $this->router->addRoute(new Route($path, $callable, $name, $method));
+
+        $route = $this->router->addRoute($route);
 
         $route->setParentGroup($this);
         return $route;
