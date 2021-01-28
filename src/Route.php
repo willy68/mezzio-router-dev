@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace Mezzio\Router;
 
+use Mezzio\Router\Middleware\Stack\MiddlewareAwareStackTrait;
+
 use function array_map;
 use function array_reduce;
 use function implode;
@@ -36,6 +38,8 @@ use function strtoupper;
  */
 class Route
 {
+    use MiddlewareAwareStackTrait;
+    
     public const HTTP_METHOD_ANY       = null;
     public const HTTP_METHOD_SEPARATOR = ':';
 
