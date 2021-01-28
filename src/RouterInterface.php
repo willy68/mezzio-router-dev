@@ -29,6 +29,26 @@ interface RouterInterface
      */
     public function addRoute(Route $route): Route;
 
+
+    /**
+     * Add RouteGroup
+     * 
+     * Add a set of routes that match the same prefix.
+     * Callable function is called until `match()` and/or
+     * `generateUri()` is called and BEFORE all routes was injected
+     *
+     * Ex:
+     * ```
+     * $router->group('/admin', function (RouteGroup $route) {
+     *  $route->route('/acme/route1', 'AcmeController::actionOne', 'route1', [GET]);
+     *  $route->route('/acme/route2', 'AcmeController::actionTwo', 'route2', [GET])->lazyMiddleware(Middleware::class);
+     *  $route->route('/acme/route3', 'AcmeController::actionThree', 'route3', [GET]);
+     * })
+     * ->middleware(Middleware::class);
+     * ```
+     */
+    public function group(string $prefix, callable $callable): RouteGroup;
+
     /**
      * Match a request against the known routes.
      *
