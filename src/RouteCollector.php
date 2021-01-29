@@ -74,8 +74,8 @@ class RouteCollector implements RouteCollectionInterface
         $methods = $methods ?? Route::HTTP_METHOD_ANY;
         $route   = new Route($path, $callback, $name, $methods);
         $this->detectDuplicate($route);
-        $this->routes[] = $route;
         $this->router->addRoute($route);
+        $this->routes[$route->getName()] = $route;
 
         return $route;
     }
@@ -163,6 +163,17 @@ class RouteCollector implements RouteCollectionInterface
     public function getRoutes(): array
     {
         return $this->routes;
+    }
+
+    /**
+     * Retrieve Route by name
+     *
+     * @param string $name
+     * @return Route|null
+     */
+    public function getRouteNames(string $name): ?Route
+    {
+        return $this->routes[$name] ?? null;
     }
 
     private function detectDuplicate(Route $route): void
