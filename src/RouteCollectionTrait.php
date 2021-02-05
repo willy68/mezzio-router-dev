@@ -20,7 +20,7 @@ trait RouteCollectionTrait
      * @param array|null $method
      * @return RouteInterface
      */
-    abstract public function addRoute(Route $route): RouteInterface;
+    abstract public function addRoute(RouteInterface $route): RouteInterface;
 
     /**
      * Add a route to the collection
