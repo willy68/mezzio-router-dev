@@ -18,9 +18,9 @@ trait RouteCollectionTrait
      * @param string|callable $callable
      * @param string|null $name
      * @param array|null $method
-     * @return RouteInterface
+     * @return Route
      */
-    abstract public function addRoute(Route $route): RouteInterface;
+    abstract public function addRoute(Route $route): Route;
 
     /**
      * Add a route to the collection
@@ -43,9 +43,9 @@ trait RouteCollectionTrait
      * @param string|callable $callable
      * @param string|null $name
      *
-     * @return RouteInterface
+     * @return Route
      */
-    public function get(string $uri, $callable, ?string $name = null): RouteInterface
+    public function get(string $uri, $callable, ?string $name = null): Route
     {
         return $this->addRoute(new Route($uri, $callable, $name, ['GET']));
     }
@@ -57,9 +57,9 @@ trait RouteCollectionTrait
      * @param string|callable $callable
      * @param string|null $name
      *
-     * @return RouteInterface
+     * @return Route
      */
-    public function post(string $uri, $callable, ?string $name = null): RouteInterface
+    public function post(string $uri, $callable, ?string $name = null): Route
     {
         return $this->addRoute(new Route($uri, $callable, $name, ['POST']));
     }
@@ -71,9 +71,9 @@ trait RouteCollectionTrait
      * @param string|callable $callable
      * @param string|null $name
      *
-     * @return RouteInterface
+     * @return Route
      */
-    public function put(string $uri, $callable, ?string $name = null): RouteInterface
+    public function put(string $uri, $callable, ?string $name = null): Route
     {
         return $this->addRoute(new Route($uri, $callable, $name, ['PUT']));
     }
@@ -85,9 +85,9 @@ trait RouteCollectionTrait
      * @param string|callable $callable
      * @param string|null $name
      *
-     * @return RouteInterface
+     * @return Route
      */
-    public function patch(string $uri, $callable, ?string $name = null): RouteInterface
+    public function patch(string $uri, $callable, ?string $name = null): Route
     {
         return $this->addRoute(new Route($uri, $callable, $name, ['PATCH']));
     }
@@ -99,9 +99,9 @@ trait RouteCollectionTrait
      * @param string|callable $callable
      * @param string|null $name
      *
-     * @return RouteInterface
+     * @return Route
      */
-    public function delete(string $uri, $callable, ?string $name = null): RouteInterface
+    public function delete(string $uri, $callable, ?string $name = null): Route
     {
         return $this->addRoute(new Route($uri, $callable, $name, ['DELETE']));
     }
@@ -112,9 +112,9 @@ trait RouteCollectionTrait
      * @param string $uri
      * @param callable|string $callable
      * @param string|null $name
-     * @return RouteInterface
+     * @return Route
      */
-    public function head(string $uri, $callable, ?string $name = null): RouteInterface
+    public function head(string $uri, $callable, ?string $name = null): Route
     {
         return $this->addRoute(new Route($uri, $callable, $name, ['HEAD']));
     }
@@ -126,9 +126,9 @@ trait RouteCollectionTrait
      * @param string|callable $callable
      * @param string|null $name
      *
-     * @return RouteInterface
+     * @return Route
      */
-    public function options(string $uri, $callable, ?string $name = null): RouteInterface
+    public function options(string $uri, $callable, ?string $name = null): Route
     {
         return $this->addRoute(new Route($uri, $callable, $name, ['OPTIONS']));
     }

@@ -59,6 +59,13 @@ class Route implements RouteInterface
     private $name;
 
     /**
+     * parent group
+     *
+     * @var RouteGroup
+     */
+    private $group;
+
+    /**
      * @param string              $path Path to match.
      * @param string|callable            $callback to use when this route is matched.
      * @param null|string[]       $methods Allowed HTTP methods; defaults to HTTP_METHOD_ANY.
@@ -150,6 +157,36 @@ class Route implements RouteInterface
         return $this->options;
     }
 
+    /**
+     * Get the parent group
+     *
+     * @return RouteGroup
+     */
+    public function getParentGroup(): ?RouteGroup
+    {
+        return $this->group;
+    }
+
+    /**
+     * Set the parent group
+     *
+     * @param RouteGroup $group
+     *
+     * @return Route
+     */
+    public function setParentGroup(RouteGroup $group): self
+    {
+        $this->group = $group;
+        $prefix      = $this->group->getPrefix();
+        $path        = $this->getPath();
+
+        if (strcmp($prefix, substr($path, 0, strlen($prefix))) !== 0) {
+            $path = $prefix . $path;
+            $this->path = $path;
+        }
+
+        return $this;
+    }
     /**
      * Validate the provided HTTP method names.
      *
