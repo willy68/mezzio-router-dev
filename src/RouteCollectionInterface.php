@@ -18,9 +18,9 @@ interface RouteCollectionInterface
      * @param string|callable $callable
      * @param string|null $name
      *
-     * @return Route
+     * @return RouteInterface
      */
-    public function get(string $uri, $callable, ?string $name = null): Route;
+    public function get(string $uri, $callable, ?string $name = null): RouteInterface;
 
     /**
      * Add a route that responds to POST HTTP method
@@ -31,7 +31,7 @@ interface RouteCollectionInterface
      *
      * @return Route
      */
-    public function post(string $uri, $callable, ?string $name = null): Route;
+    public function post(string $uri, $callable, ?string $name = null): RouteInterface;
 
     /**
      * Add a route that responds to PUT HTTP method
@@ -42,7 +42,7 @@ interface RouteCollectionInterface
      *
      * @return Route
      */
-    public function put(string $uri, $callable, ?string $name = null): Route;
+    public function put(string $uri, $callable, ?string $name = null): RouteInterface;
 
     /**
      * Add a route that responds to PATCH HTTP method
@@ -53,7 +53,7 @@ interface RouteCollectionInterface
      *
      * @return Route
      */
-    public function patch(string $uri, $callable, ?string $name = null): Route;
+    public function patch(string $uri, $callable, ?string $name = null): RouteInterface;
 
     /**
      * Add a route that responds to DELETE HTTP method
@@ -64,7 +64,7 @@ interface RouteCollectionInterface
      *
      * @return Route
      */
-    public function delete(string $uri, $callable, ?string $name = null): Route;
+    public function delete(string $uri, $callable, ?string $name = null): RouteInterface;
 
     /**
      * Add a route that responds to HEAD HTTP method
@@ -74,7 +74,7 @@ interface RouteCollectionInterface
      * @param string|null $name
      * @return Route
      */
-    public function head(string $uri, $callable, ?string $name = null): Route;
+    public function head(string $uri, $callable, ?string $name = null): RouteInterface;
 
     /**
      * Add a route that responds to OPTIONS HTTP method
@@ -85,5 +85,5 @@ interface RouteCollectionInterface
      *
      * @return Route
      */
-    public function options(string $uri, $callable, ?string $name = null): Route;
+    public function options(string $uri, $callable, ?string $name = null): RouteInterface;
 }

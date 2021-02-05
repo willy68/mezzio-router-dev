@@ -45,7 +45,7 @@ class RouteResult
      * Route matched during routing
      *
      * @since 1.3.0
-     * @var Route
+     * @var RouteInterface
      */
     private $route;
 
@@ -57,7 +57,7 @@ class RouteResult
      *
      * @param array $params Parameters associated with the matched route, if any.
      */
-    public static function fromRoute(Route $route, array $params = []): self
+    public static function fromRoute(RouteInterface $route, array $params = []): self
     {
         $result                = new self();
         $result->success       = true;
@@ -92,7 +92,7 @@ class RouteResult
     /**
      * Retrieve the route that resulted in the route match.
      *
-     * @return false|null|Route false if representing a routing failure;
+     * @return false|null|RouteInterface false if representing a routing failure;
      *     null if not created via fromRoute(); Route instance otherwise.
      */
     public function getMatchedRoute()

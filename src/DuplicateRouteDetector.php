@@ -21,7 +21,7 @@ final class DuplicateRouteDetector
     /**
      * List of all routes indexed by name
      *
-     * @var Route[]
+     * @var RouteInterface[]
      */
     private $routeNames = [];
 
@@ -51,13 +51,13 @@ final class DuplicateRouteDetector
      *
      * @throws Exception\DuplicateRouteException On duplicate route detection.
      */
-    public function detectDuplicate(Route $route): void
+    public function detectDuplicate(RouteInterface $route): void
     {
         $this->throwOnDuplicate($route);
         $this->remember($route);
     }
 
-    private function remember(Route $route): void
+    private function remember(RouteInterface $route): void
     {
         $this->routeNames[$route->getName()] = $route;
         if ($route->allowsAnyMethod()) {
@@ -70,7 +70,7 @@ final class DuplicateRouteDetector
         }
     }
 
-    private function throwOnDuplicate(Route $route): void
+    private function throwOnDuplicate(RouteInterface $route): void
     {
         if (isset($this->routeNames[$route->getName()])) {
             $this->duplicateRouteDetected($route);
@@ -96,7 +96,7 @@ final class DuplicateRouteDetector
         }
     }
 
-    private function duplicateRouteDetected(Route $duplicate): void
+    private function duplicateRouteDetected(RouteInterface $duplicate): void
     {
         $allowedMethods = $duplicate->getAllowedMethods() ?: ['(any)'];
         $name           = $duplicate->getName();

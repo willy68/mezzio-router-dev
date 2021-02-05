@@ -36,7 +36,7 @@ use function strtoupper;
  * be provided after instantiation via the "options" property and related
  * setOptions() method.
  */
-class Route
+class Route implements RouteInterface
 {
     use MiddlewareAwareStackTrait;
     

@@ -43,7 +43,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * List of all routes registered directly with the application.
      *
-     * @var Route[]
+     * @var RouteInterface[]
      */
     private $routes = [];
 
@@ -70,7 +70,7 @@ class RouteCollector implements RouteCollectionInterface
         $callback,
         ?string $name = null,
         ?array $methods = null
-    ): Route {
+    ): RouteInterface {
         $methods = $methods ?? Route::HTTP_METHOD_ANY;
         $route   = new Route($path, $callback, $name, $methods);
         $this->detectDuplicate($route);
@@ -83,7 +83,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * @param null|string $name The name of the route.
      */
-    public function get(string $path, $callback, ?string $name = null): Route
+    public function get(string $path, $callback, ?string $name = null): RouteInterface
     {
         return $this->route($path, $callback, $name, ['GET']);
     }
@@ -91,7 +91,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * @param null|string $name The name of the route.
      */
-    public function post(string $path, $callback, ?string $name = null): Route
+    public function post(string $path, $callback, ?string $name = null): RouteInterface
     {
         return $this->route($path, $callback, $name, ['POST']);
     }
@@ -99,7 +99,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * @param null|string $name The name of the route.
      */
-    public function put(string $path, $callback, ?string $name = null): Route
+    public function put(string $path, $callback, ?string $name = null): RouteInterface
     {
         return $this->route($path, $callback, $name, ['PUT']);
     }
@@ -107,7 +107,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * @param null|string $name The name of the route.
      */
-    public function patch(string $path, $callback, ?string $name = null): Route
+    public function patch(string $path, $callback, ?string $name = null): RouteInterface
     {
         return $this->route($path, $callback, $name, ['PATCH']);
     }
@@ -115,7 +115,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * @param null|string $name The name of the route.
      */
-    public function delete(string $path, $callback, ?string $name = null): Route
+    public function delete(string $path, $callback, ?string $name = null): RouteInterface
     {
         return $this->route($path, $callback, $name, ['DELETE']);
     }
@@ -123,7 +123,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * @param null|string $name The name of the route.
      */
-    public function any(string $path, $callback, ?string $name = null): Route
+    public function any(string $path, $callback, ?string $name = null): RouteInterface
     {
         return $this->route($path, $callback, $name, null);
     }
@@ -134,9 +134,9 @@ class RouteCollector implements RouteCollectionInterface
      * @param string $uri
      * @param callable|string $callable
      * @param string|null $name
-     * @return Route
+     * @return RouteInterface
      */
-    public function head(string $uri, $callable, ?string $name = null): Route
+    public function head(string $uri, $callable, ?string $name = null): RouteInterface
     {
         return $this->route($uri, $callable, $name, ['HEAD']);
     }
@@ -148,9 +148,9 @@ class RouteCollector implements RouteCollectionInterface
      * @param string|callable $callable
      * @param string|null $name
      *
-     * @return Route
+     * @return RouteInterface
      */
-    public function options(string $uri, $callable, ?string $name = null): Route
+    public function options(string $uri, $callable, ?string $name = null): RouteInterface
     {
         return $this->route($uri, $callable, $name, ['OPTIONS']);
     }
@@ -158,7 +158,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * Retrieve all directly registered routes with the application.
      *
-     * @return Route[]
+     * @return RouteInterface[]
      */
     public function getRoutes(): array
     {
@@ -169,14 +169,14 @@ class RouteCollector implements RouteCollectionInterface
      * Retrieve Route by name
      *
      * @param string $name
-     * @return Route|null
+     * @return RouteInterface|null
      */
-    public function getRouteName(string $name): ?Route
+    public function getRouteName(string $name): ?RouteInterface
     {
         return $this->routes[$name] ?? null;
     }
 
-    private function detectDuplicate(Route $route): void
+    private function detectDuplicate(RouteInterface $route): void
     {
         if ($this->detectDuplicates && !$this->duplicateRouteDetector) {
             $this->duplicateRouteDetector = new DuplicateRouteDetector();
