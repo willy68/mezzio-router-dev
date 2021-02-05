@@ -171,7 +171,7 @@ class RouteCollector implements RouteCollectionInterface
      * @param string $name
      * @return Route|null
      */
-    public function getRouteNames(string $name): ?Route
+    public function getRouteName(string $name): ?Route
     {
         return $this->routes[$name] ?? null;
     }
