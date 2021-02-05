@@ -107,9 +107,9 @@ class RouteGroup
     {
         $this->get("/", $callable . '::index', "$prefixName.index");
         $this->get("/new", $callable . '::create', "$prefixName.create");
-        $this->post("/new", $callable . '::create');
+        $this->post("/new", $callable . '::create', "$prefixName.create.post");
         $this->get("/{id:\d+}", $callable . '::edit', "$prefixName.edit");
-        $this->post("/{id:\d+}", $callable . '::edit');
+        $this->post("/{id:\d+}", $callable . '::edit', "$prefixName.edit.post");
         $this->delete("/{id:\d+}", $callable . '::delete', "$prefixName.delete");
         return $this;
     }
