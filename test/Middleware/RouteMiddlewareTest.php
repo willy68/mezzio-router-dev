@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-router for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-router/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-router/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -21,7 +19,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Expressive\Router\RouteResult as ZendExpressiveRouteResult;
+use zend\expressive\router\routeresult as ZendExpressiveRouteResult;
 
 class RouteMiddlewareTest extends TestCase
 {

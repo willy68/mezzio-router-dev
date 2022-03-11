@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-router for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-router/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-router/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -131,10 +129,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * Add a route that responds to HEAD HTTP method
      *
-     * @param string $uri
      * @param callable|string $callable
-     * @param string|null $name
-     * @return Route
      */
     public function head(string $uri, $callable, ?string $name = null): Route
     {
@@ -144,11 +139,7 @@ class RouteCollector implements RouteCollectionInterface
     /**
      * Add a route that responds to OPTIONS HTTP method
      *
-     * @param string $uri
      * @param string|callable $callable
-     * @param string|null $name
-     *
-     * @return Route
      */
     public function options(string $uri, $callable, ?string $name = null): Route
     {
@@ -167,9 +158,6 @@ class RouteCollector implements RouteCollectionInterface
 
     /**
      * Retrieve Route by name
-     *
-     * @param string $name
-     * @return Route|null
      */
     public function getRouteName(string $name): ?Route
     {
@@ -178,7 +166,7 @@ class RouteCollector implements RouteCollectionInterface
 
     private function detectDuplicate(Route $route): void
     {
-        if ($this->detectDuplicates && !$this->duplicateRouteDetector) {
+        if ($this->detectDuplicates && ! $this->duplicateRouteDetector) {
             $this->duplicateRouteDetector = new DuplicateRouteDetector();
         }
 

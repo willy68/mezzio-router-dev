@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-router for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-router/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-router/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -30,7 +28,7 @@ class ImplicitOptionsMiddlewareFactory
      */
     public function __invoke(ContainerInterface $container): ImplicitOptionsMiddleware
     {
-        if (!$container->has(ResponseInterface::class)) {
+        if (! $container->has(ResponseInterface::class)) {
             throw MissingDependencyException::dependencyForService(
                 ResponseInterface::class,
                 ImplicitOptionsMiddleware::class

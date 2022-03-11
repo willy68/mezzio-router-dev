@@ -15,8 +15,6 @@ interface MiddlewareStackInterface
     /**
      * Add a middleware to the stack
      *
-     * @param MiddlewareInterface $middleware
-     *
      * @return static
      */
     public function middleware(MiddlewareInterface $middleware): self;
@@ -25,15 +23,12 @@ interface MiddlewareStackInterface
      * Add multiple middleware to the stack
      *
      * @param MiddlewareInterface[] $middlewares
-     *
      * @return static
      */
     public function middlewares(array $middlewares): self;
 
     /**
      * Prepend a middleware to the stack
-     *
-     * @param MiddlewareInterface $middleware
      *
      * @return static
      */

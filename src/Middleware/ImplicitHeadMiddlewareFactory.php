@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-router for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-router/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-router/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -35,8 +33,8 @@ class ImplicitHeadMiddlewareFactory
     public function __invoke(ContainerInterface $container): ImplicitHeadMiddleware
     {
         if (
-            !$container->has(RouterInterface::class)
-            && !$container->has(ZendExpressiveRouterInterface::class)
+            ! $container->has(RouterInterface::class)
+            && ! $container->has(ZendExpressiveRouterInterface::class)
         ) {
             throw MissingDependencyException::dependencyForService(
                 RouterInterface::class,
@@ -44,7 +42,7 @@ class ImplicitHeadMiddlewareFactory
             );
         }
 
-        if (!$container->has(StreamInterface::class)) {
+        if (! $container->has(StreamInterface::class)) {
             throw MissingDependencyException::dependencyForService(
                 StreamInterface::class,
                 ImplicitHeadMiddleware::class

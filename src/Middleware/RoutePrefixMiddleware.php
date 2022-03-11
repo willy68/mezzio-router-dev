@@ -1,19 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mezzio\Router\Middleware;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
+use function stripos;
 
 class RoutePrefixMiddleware implements MiddlewareInterface
 {
-
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     private $container;
 
     /**
@@ -23,25 +24,17 @@ class RoutePrefixMiddleware implements MiddlewareInterface
      */
     private $routePrefix;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $middleware;
 
-    /**
-     * RoutePrefixMiddleware constructor.
-     * @param ContainerInterface $container
-     * @param string $routePrefix
-     * @param string $middleware
-     */
     public function __construct(
         ContainerInterface $container,
         string $routePrefix,
         string $middleware
     ) {
-        $this->container = $container;
+        $this->container   = $container;
         $this->routePrefix = $routePrefix;
-        $this->middleware = $middleware;
+        $this->middleware  = $middleware;
     }
 
     /**
@@ -50,10 +43,6 @@ class RoutePrefixMiddleware implements MiddlewareInterface
      * Processes an incoming server request in order to produce a response.
      * If unable to produce the response itself, it may delegate to the provided
      * request handler to do so.
-     *
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

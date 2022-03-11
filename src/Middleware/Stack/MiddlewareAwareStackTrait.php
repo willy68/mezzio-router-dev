@@ -8,22 +8,23 @@ declare(strict_types=1);
 
 namespace Mezzio\Router\Middleware\Stack;
 
+use Mezzio\Router\Middleware\RoutePrefixMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\MiddlewareInterface;
-use Mezzio\Router\Middleware\RoutePrefixMiddleware;
+
+use function array_shift;
+use function array_unshift;
+use function is_string;
 
 trait MiddlewareAwareStackTrait
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $middleware = [];
 
     /**
      * Add middleware
      *
      * @param string|MiddlewareInterface $middleware
-     * @return self
      */
     public function middleware($middleware): self
     {
@@ -35,7 +36,6 @@ trait MiddlewareAwareStackTrait
      * Add middlewares array
      *
      * @param string[]|MiddlewareInterface[] $middlewares
-     * @return self
      */
     public function middlewares(array $middlewares): self
     {
@@ -49,7 +49,6 @@ trait MiddlewareAwareStackTrait
      * Add middleware in first
      *
      * @param string|MiddlewareInterface $middleware
-     * @return self
      */
     public function prependMiddleware($middleware): self
     {
@@ -57,17 +56,9 @@ trait MiddlewareAwareStackTrait
         return $this;
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param string $routePrefix
-     * @param string|null $middleware
-     * @param ContainerInterface $c
-     * @return self
-     */
-    public function lazyPipe(string $routePrefix, ?string $middleware = null, ContainerInterface $c): self
+    public function lazyPipe(string $routePrefix, ContainerInterface $c, ?string $middleware = null): self
     {
-        $middleware = $middleware ?
+        $middleware         = $middleware ?
             new RoutePrefixMiddleware($c, $routePrefix, $middleware) :
             $routePrefix;
         $this->middleware[] = $middleware;
@@ -76,13 +67,10 @@ trait MiddlewareAwareStackTrait
 
     /**
      * Undocumented function
-     *
-     * @param ContainerInterface $c
-     * @return MiddlewareInterface|null
      */
     public function shiftMiddleware(ContainerInterface $c): ?MiddlewareInterface
     {
-        $middleware =  array_shift($this->middleware);
+        $middleware = array_shift($this->middleware);
         if ($middleware === null) {
             return null;
         }

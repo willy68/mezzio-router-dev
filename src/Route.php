@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-router for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-router/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-router/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -19,7 +17,10 @@ use function in_array;
 use function is_array;
 use function is_string;
 use function preg_match;
+use function strcmp;
+use function strlen;
 use function strtoupper;
+use function substr;
 
 /**
  * Value object representing a single route.
@@ -39,7 +40,7 @@ use function strtoupper;
 class Route implements RouteInterface
 {
     use MiddlewareAwareStackTrait;
-    
+
     public const HTTP_METHOD_ANY       = null;
     public const HTTP_METHOD_SEPARATOR = ':';
 
@@ -77,11 +78,11 @@ class Route implements RouteInterface
         ?string $name = null,
         ?array $methods = self::HTTP_METHOD_ANY
     ) {
-        $this->path       = $path;
-        $this->callback   = $callback;
-        $this->methods    = is_array($methods) ? $this->validateHttpMethods($methods) : $methods;
+        $this->path     = $path;
+        $this->callback = $callback;
+        $this->methods  = is_array($methods) ? $this->validateHttpMethods($methods) : $methods;
 
-        if (!$name) {
+        if (! $name) {
             $name = $this->methods === self::HTTP_METHOD_ANY
                 ? $path
                 : $path . '^' . implode(self::HTTP_METHOD_SEPARATOR, $this->methods);
@@ -159,8 +160,6 @@ class Route implements RouteInterface
 
     /**
      * Get the parent group
-     *
-     * @return RouteGroup
      */
     public function getParentGroup(): ?RouteGroup
     {
@@ -169,8 +168,6 @@ class Route implements RouteInterface
 
     /**
      * Set the parent group
-     *
-     * @param RouteGroup $group
      *
      * @return Route
      */
@@ -181,12 +178,13 @@ class Route implements RouteInterface
         $path        = $this->getPath();
 
         if (strcmp($prefix, substr($path, 0, strlen($prefix))) !== 0) {
-            $path = $prefix . $path;
+            $path       = $prefix . $path;
             $this->path = $path;
         }
 
         return $this;
     }
+
     /**
      * Validate the provided HTTP method names.
      *
@@ -210,11 +208,11 @@ class Route implements RouteInterface
                     return false;
                 }
 
-                if (!is_string($method)) {
+                if (! is_string($method)) {
                     return false;
                 }
 
-                if (!preg_match('/^[!#$%&\'*+.^_`\|~0-9a-z-]+$/i', $method)) {
+                if (! preg_match('/^[!#$%&\'*+.^_`\|~0-9a-z-]+$/i', $method)) {
                     return false;
                 }
 

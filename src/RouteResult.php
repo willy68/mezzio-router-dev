@@ -2,8 +2,6 @@
 
 /**
  * @see       https://github.com/mezzio/mezzio-router for the canonical source repository
- * @copyright https://github.com/mezzio/mezzio-router/blob/master/COPYRIGHT.md
- * @license   https://github.com/mezzio/mezzio-router/blob/master/LICENSE.md New BSD License
  */
 
 declare(strict_types=1);
@@ -114,7 +112,7 @@ class RouteResult
             return false;
         }
 
-        if (!$this->matchedRouteName && $this->route) {
+        if (! $this->matchedRouteName && $this->route) {
             $this->matchedRouteName = $this->route->getName();
         }
 
@@ -136,7 +134,7 @@ class RouteResult
      */
     public function isFailure(): bool
     {
-        return !$this->success;
+        return ! $this->success;
     }
 
     /**

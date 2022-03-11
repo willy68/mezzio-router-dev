@@ -6,6 +6,10 @@ namespace Mezzio\Router;
 
 use Mezzio\Router\Middleware\Stack\MiddlewareAwareStackTrait;
 
+use function join;
+use function ltrim;
+use function sprintf;
+
 /**
  * Ex:
  * ```
@@ -16,7 +20,6 @@ use Mezzio\Router\Middleware\Stack\MiddlewareAwareStackTrait;
  * })
  * ->middleware(Middleware::class);
  * ```
- *
  */
 class RouteGroup
 {
@@ -46,16 +49,12 @@ class RouteGroup
 
     /**
      * Construct
-     *
-     * @param string $prefix
-     * @param callable $callable
-     * @param RouterInterface $router
      */
     public function __construct(string $prefix, callable $callable, RouterInterface $router)
     {
-        $this->prefix = $prefix;
+        $this->prefix   = $prefix;
         $this->callable = $callable;
-        $this->router = $router;
+        $this->router   = $router;
     }
 
     /**
@@ -75,18 +74,17 @@ class RouteGroup
      * @param string|callable $callable
      * @param string|null $name
      * @param array|null $method
-     * @return Route
      */
     public function addRoute(Route $route): Route
     {
-        $uri = $route->getPath();
-        $path  = ($uri === '/') ? $this->prefix : $this->prefix . sprintf('/%s', ltrim($uri, '/'));
+        $uri  = $route->getPath();
+        $path = $uri === '/' ? $this->prefix : $this->prefix . sprintf('/%s', ltrim($uri, '/'));
         $route->setPath($path);
 
-        $name = $route->getName();
+        $name   = $route->getName();
         $method = $route->getAllowedMethods();
         if ($name === null) {
-            $name = ($method === null) ? $this->prefix . $path : $this->prefix . $path . '^' . join(':', $method);
+            $name = $method === null ? $this->prefix . $path : $this->prefix . $path . '^' . join(':', $method);
         }
         $route->setName($name);
 
@@ -100,8 +98,6 @@ class RouteGroup
      * Perfom all crud routes for a given class controller
      *
      * @param string|callable $callable the class name generally
-     * @param string $prefixName
-     * @return self
      */
     public function crud($callable, string $prefixName): self
     {
@@ -116,8 +112,6 @@ class RouteGroup
 
     /**
      * Get the value of prefix
-     *
-     * @return string
      */
     public function getPrefix(): string
     {
