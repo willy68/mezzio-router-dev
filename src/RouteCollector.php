@@ -59,8 +59,9 @@ class RouteCollector implements RouteCollectionInterface
      *
      * Accepts a combination of a path and callback, and optionally the HTTP methods allowed.
      *
-     * @param null|array  $methods HTTP method to accept; null indicates any.
+     * @param string|callable $callback
      * @param null|string $name The name of the route.
+     * @param null|array  $methods HTTP method to accept; null indicates any.
      * @throws Exception\DuplicateRouteException If specification represents an existing route.
      */
     public function route(
@@ -79,6 +80,7 @@ class RouteCollector implements RouteCollectionInterface
     }
 
     /**
+     * @param string|callable $callback
      * @param null|string $name The name of the route.
      */
     public function get(string $path, $callback, ?string $name = null): Route
@@ -87,6 +89,7 @@ class RouteCollector implements RouteCollectionInterface
     }
 
     /**
+     * @param string|callable $callback
      * @param null|string $name The name of the route.
      */
     public function post(string $path, $callback, ?string $name = null): Route
@@ -95,6 +98,7 @@ class RouteCollector implements RouteCollectionInterface
     }
 
     /**
+     * @param string|callable $callback
      * @param null|string $name The name of the route.
      */
     public function put(string $path, $callback, ?string $name = null): Route
@@ -103,6 +107,7 @@ class RouteCollector implements RouteCollectionInterface
     }
 
     /**
+     * @param string|callable $callback
      * @param null|string $name The name of the route.
      */
     public function patch(string $path, $callback, ?string $name = null): Route
@@ -111,6 +116,7 @@ class RouteCollector implements RouteCollectionInterface
     }
 
     /**
+     * @param string|callable $callback
      * @param null|string $name The name of the route.
      */
     public function delete(string $path, $callback, ?string $name = null): Route
@@ -119,6 +125,7 @@ class RouteCollector implements RouteCollectionInterface
     }
 
     /**
+     * @param string|callable $callback
      * @param null|string $name The name of the route.
      */
     public function any(string $path, $callback, ?string $name = null): Route
@@ -130,6 +137,7 @@ class RouteCollector implements RouteCollectionInterface
      * Add a route that responds to HEAD HTTP method
      *
      * @param callable|string $callable
+     * @param null|string $name The name of the route.
      */
     public function head(string $uri, $callable, ?string $name = null): Route
     {
@@ -140,6 +148,7 @@ class RouteCollector implements RouteCollectionInterface
      * Add a route that responds to OPTIONS HTTP method
      *
      * @param string|callable $callable
+     * @param null|string $name The name of the route.
      */
     public function options(string $uri, $callable, ?string $name = null): Route
     {

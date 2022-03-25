@@ -6,7 +6,7 @@ namespace Mezzio\Router;
 
 use Mezzio\Router\Middleware\Stack\MiddlewareAwareStackTrait;
 
-use function join;
+use function implode;
 use function ltrim;
 use function sprintf;
 
@@ -69,11 +69,6 @@ class RouteGroup
 
     /**
      * Add route
-     *
-     * @param string $uri
-     * @param string|callable $callable
-     * @param string|null $name
-     * @param array|null $method
      */
     public function addRoute(Route $route): Route
     {
@@ -84,7 +79,7 @@ class RouteGroup
         $name   = $route->getName();
         $method = $route->getAllowedMethods();
         if ($name === null) {
-            $name = $method === null ? $this->prefix . $path : $this->prefix . $path . '^' . join(':', $method);
+            $name = $method === null ? $this->prefix . $path : $this->prefix . $path . '^' . implode(':', $method);
         }
         $route->setName($name);
 

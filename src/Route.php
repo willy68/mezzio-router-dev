@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Mezzio\Router;
 
 use Mezzio\Router\Middleware\Stack\MiddlewareAwareStackTrait;
+use Psr\Http\Message\ServerRequestInterface;
 
 use function array_map;
 use function array_reduce;
@@ -19,6 +20,7 @@ use function is_string;
 use function preg_match;
 use function strcmp;
 use function strlen;
+use function strtolower;
 use function strtoupper;
 use function substr;
 
@@ -43,6 +45,7 @@ class Route implements RouteInterface
 
     public const HTTP_METHOD_ANY       = null;
     public const HTTP_METHOD_SEPARATOR = ':';
+    public const HTTP_SCHEME_ANY       = null;
 
     /** @var null|string[] HTTP methods allowed with this route. */
     private $methods;
@@ -58,6 +61,15 @@ class Route implements RouteInterface
 
     /** @var string */
     private $name;
+
+    /** @var ?string */
+    protected $host;
+
+    /** @var ?int */
+    protected $port;
+
+    /** @var null|string[] */
+    protected $schemes;
 
     /**
      * parent group
@@ -115,6 +127,11 @@ class Route implements RouteInterface
         return $this->name;
     }
 
+    /**
+     * get Route callback (controller method)
+     *
+     * @return string|callable|mixed
+     */
     public function getCallback()
     {
         return $this->callback;
@@ -145,6 +162,69 @@ class Route implements RouteInterface
     public function allowsAnyMethod(): bool
     {
         return $this->methods === self::HTTP_METHOD_ANY;
+    }
+
+    public function getHost(): ?string
+    {
+        return $this->host;
+    }
+
+    public function getPort(): ?int
+    {
+        return $this->port;
+    }
+
+    /**
+     * get schemes array available for this route
+     *
+     * @return null|string[] Returns HTTP_SCHEME_ANY or array of allowed schemes.
+     */
+    public function getSchemes(): ?array
+    {
+        return $this->schemes;
+    }
+
+    /**
+     * Indicate whether the specified scheme is allowed by the route.
+     *
+     * @param string $method HTTP method to test.
+     */
+    public function allowsScheme(string $scheme): bool
+    {
+        $scheme = strtolower($scheme);
+        return $this->allowsAnyScheme() || in_array($scheme, $this->schemes, true);
+    }
+
+    /**
+     * Indicate whether any scheme is allowed by the route.
+     */
+    public function allowsAnyScheme(): bool
+    {
+        return $this->schemes === self::HTTP_SCHEME_ANY;
+    }
+
+    public function setHost(string $host): self
+    {
+        $this->host = $host;
+        return $this;
+    }
+
+    public function setPort(int $port): self
+    {
+        $this->port = $port;
+        return $this;
+    }
+
+    /**
+     * set schemes available for this route
+     *
+     * @param string[] $schemes
+     * @return Route
+     */
+    public function setSchemes(array $schemes): self
+    {
+        $this->schemes = $schemes;
+        return $this;
     }
 
     public function setOptions(array $options): self
@@ -223,5 +303,23 @@ class Route implements RouteInterface
         }
 
         return array_map('strtoupper', $methods);
+    }
+
+    protected function isExtraConditionMatch(Route $route, ServerRequestInterface $request): bool
+    {
+        // check for scheme condition
+        if (! $route->allowsScheme($request->getUri()->getScheme())) {
+            return false;
+        }
+
+        // check for domain condition
+        $host = $route->getHost();
+        if ($host !== null && $host !== $request->getUri()->getHost()) {
+            return false;
+        }
+
+        // check for port condition
+        $port = $route->getPort();
+        return ! ($port !== null && $port !== $request->getUri()->getPort());
     }
 }

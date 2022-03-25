@@ -12,11 +12,6 @@ trait RouteCollectionTrait
 {
     /**
      * Add a route to the collection
-     *
-     * @param string $uri
-     * @param string|callable $callable
-     * @param string|null $name
-     * @param array|null $method
      */
     abstract public function addRoute(Route $route): Route;
 
