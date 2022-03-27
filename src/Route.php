@@ -68,8 +68,8 @@ class Route implements RouteInterface
     /** @var ?int */
     protected $port;
 
-    /** @var ?string */
-    protected $scheme;
+    /** @var null|string[] Schemes allowed with this route */
+    protected $schemes;
 
     /**
      * parent group
@@ -175,13 +175,13 @@ class Route implements RouteInterface
     }
 
     /**
-     * get scheme array available for this route
+     * get schemes array available for this route
      *
-     * @return ?string Returns HTTP_SCHEME_ANY or string of allowed scheme.
+     * @return null|string[] Returns HTTP_SCHEME_ANY or string of allowed schemes.
      */
-    public function getScheme(): ?string
+    public function getSchemes(): ?array
     {
-        return $this->scheme;
+        return $this->schemes;
     }
 
     /**
@@ -191,16 +191,28 @@ class Route implements RouteInterface
      */
     public function allowsScheme(string $scheme): bool
     {
-        $scheme = strtolower($scheme);
-        return $this->allowsAnyScheme() || $scheme === $this->scheme;
+        $schemes = strtolower($scheme);
+        return $this->allowsAnyScheme() || in_array($schemes, $this->schemes, true);
     }
 
     /**
-     * Indicate whether any scheme is allowed by the route.
+     * Indicate whether any schemes is allowed by the route.
      */
     public function allowsAnyScheme(): bool
     {
-        return $this->scheme === self::HTTP_SCHEME_ANY;
+        return $this->schemes === self::HTTP_SCHEME_ANY;
+    }
+
+    /**
+     * set schemes available for this route
+     *
+     * @return Route
+     */
+    public function setScheme(?array $schemes = null): self
+    {
+        $schemes       = is_array($schemes) ? array_map('strtolower', $schemes) : $schemes;
+        $this->schemes = $schemes;
+        return $this;
     }
 
     public function setHost(string $host): self
@@ -212,18 +224,6 @@ class Route implements RouteInterface
     public function setPort(int $port): self
     {
         $this->port = $port;
-        return $this;
-    }
-
-    /**
-     * set scheme available for this route
-     *
-     * @return Route
-     */
-    public function setScheme(?string $scheme = null): self
-    {
-        $scheme       = $scheme ? strtolower($scheme) : $scheme;
-        $this->scheme = $scheme;
         return $this;
     }
 
@@ -307,7 +307,7 @@ class Route implements RouteInterface
 
     protected function isExtraConditionMatch(Route $route, ServerRequestInterface $request): bool
     {
-        // check for scheme condition
+        // check for schemes condition
         if (! $route->allowsScheme($request->getUri()->getScheme())) {
             return false;
         }
