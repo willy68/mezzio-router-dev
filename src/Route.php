@@ -208,7 +208,7 @@ class Route implements RouteInterface
      *
      * @return Route
      */
-    public function setScheme(?array $schemes = null): self
+    public function setSchemes(?array $schemes = null): self
     {
         $schemes       = is_array($schemes) ? array_map('strtolower', $schemes) : $schemes;
         $this->schemes = $schemes;
