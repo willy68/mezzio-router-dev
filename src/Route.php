@@ -68,8 +68,8 @@ class Route implements RouteInterface
     /** @var ?int */
     protected $port;
 
-    /** @var null|string[] */
-    protected $schemes;
+    /** @var ?string */
+    protected $scheme;
 
     /**
      * parent group
@@ -175,13 +175,13 @@ class Route implements RouteInterface
     }
 
     /**
-     * get schemes array available for this route
+     * get scheme array available for this route
      *
-     * @return null|string[] Returns HTTP_SCHEME_ANY or array of allowed schemes.
+     * @return ?string Returns HTTP_SCHEME_ANY or string of allowed scheme.
      */
-    public function getSchemes(): ?array
+    public function getScheme(): ?string
     {
-        return $this->schemes;
+        return $this->scheme;
     }
 
     /**
@@ -192,7 +192,7 @@ class Route implements RouteInterface
     public function allowsScheme(string $scheme): bool
     {
         $scheme = strtolower($scheme);
-        return $this->allowsAnyScheme() || in_array($scheme, $this->schemes, true);
+        return $this->allowsAnyScheme() || $scheme === $this->scheme;
     }
 
     /**
@@ -200,7 +200,7 @@ class Route implements RouteInterface
      */
     public function allowsAnyScheme(): bool
     {
-        return $this->schemes === self::HTTP_SCHEME_ANY;
+        return $this->scheme === self::HTTP_SCHEME_ANY;
     }
 
     public function setHost(string $host): self
@@ -216,14 +216,14 @@ class Route implements RouteInterface
     }
 
     /**
-     * set schemes available for this route
+     * set scheme available for this route
      *
-     * @param string[] $schemes
      * @return Route
      */
-    public function setSchemes(array $schemes): self
+    public function setScheme(?string $scheme = null): self
     {
-        $this->schemes = $schemes;
+        $scheme       = $scheme ? strtolower($scheme) : $scheme;
+        $this->scheme = $scheme;
         return $this;
     }
 
