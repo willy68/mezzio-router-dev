@@ -26,6 +26,8 @@ namespace Mezzio\Router;
  * A general `route()` method allows specifying multiple request methods and/or
  * arbitrary request methods when creating a path-based route.
  *
+ * A general `addRoute()` method with created Route add route on the router.
+ *
  * Internally, the class performs some checks for duplicate routes when
  * attaching via one of the exposed methods, and will raise an exception when a
  * collision occurs.
@@ -55,6 +57,19 @@ class RouteCollector implements RouteCollectionInterface
     }
 
     /**
+     * Add a route to the collection.
+     *
+     * @throws Exception\DuplicateRouteException If specification represents an existing route.
+     */
+    public function addRoute(Route $route): Route
+    {
+        $this->detectDuplicate($route);
+        $this->router->addRoute($route);
+        $this->routes[$route->getName()] = $route;
+        return $route;
+    }
+
+    /**
      * Add a route for the route middleware to match.
      *
      * Accepts a combination of a path and callback, and optionally the HTTP methods allowed.
@@ -72,11 +87,7 @@ class RouteCollector implements RouteCollectionInterface
     ): Route {
         $methods = $methods ?? Route::HTTP_METHOD_ANY;
         $route   = new Route($path, $callback, $name, $methods);
-        $this->detectDuplicate($route);
-        $this->router->addRoute($route);
-        $this->routes[$route->getName()] = $route;
-
-        return $route;
+        return $this->addRoute($route);
     }
 
     /**
@@ -153,6 +164,43 @@ class RouteCollector implements RouteCollectionInterface
     public function options(string $uri, $callable, ?string $name = null): Route
     {
         return $this->route($uri, $callable, $name, ['OPTIONS']);
+    }
+
+    /**
+     * Add RouteGroup
+     *
+     * Ex:
+     * ```
+     * $router->group('/admin', function (RouteGroup $route) {
+     *  $route->route('/acme/route1', 'AcmeController::actionOne', 'route1', [GET]);
+     *  $route->route('/acme/route2', 'AcmeController::actionTwo', 'route2', [GET])->lazyMiddleware(Middleware::class);
+     *  $route->route('/acme/route3', 'AcmeController::actionThree', 'route3', [GET]);
+     * })
+     * ->middleware(Middleware::class);
+     * ```
+     */
+    public function group(string $prefix, callable $callable): RouteGroup
+    {
+        $group = new RouteGroup($prefix, $callable, $this);
+        /* run group to inject routes on router*/
+        $group();
+
+        return $group;
+    }
+
+    /**
+     * Generate crud Routes
+     *
+     * @param string|callable $callable
+     */
+    public function crud(string $prefixPath, $callable, string $prefixName): RouteGroup
+    {
+        return $this->group(
+            $prefixPath,
+            function (RouteGroup $route) use ($callable, $prefixName) {
+                $route->crud($callable, $prefixName);
+            }
+        );
     }
 
     /**

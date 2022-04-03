@@ -11,6 +11,11 @@ namespace Mezzio\Router;
 interface RouteCollectionInterface
 {
     /**
+     * Add a route to the collection.
+     */
+    public function addRoute(Route $route): Route;
+
+    /**
      * Add a route that responds to GET HTTP method
      *
      * @param string|callable $callable
