@@ -43,14 +43,15 @@ class RouteGroup
     /**
      * Router
      *
-     * @var RouterInterface
+     * @var RouteCollectionInterface|RouterInterface
      */
     private $router;
-
     /**
-     * Construct
+     * constructor
+     *
+     * @param RouteCollectionInterface|RouterInterface $router
      */
-    public function __construct(string $prefix, callable $callable, RouterInterface $router)
+    public function __construct(string $prefix, callable $callable, $router)
     {
         $this->prefix   = $prefix;
         $this->callable = $callable;
